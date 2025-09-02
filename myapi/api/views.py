@@ -6,7 +6,7 @@ from .serializer import ProductoSerializer
 from django.http import HttpResponse
 
 class ProductoViewSet(viewsets.ModelViewSet):
-    querySet = Producto.objects.all()
+    queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
 
     @action(detail= False, methods=['get'])
@@ -16,7 +16,7 @@ class ProductoViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(productos, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methodss=['post'])
+    @action(detail=True, methods=['post'])
     def ajustar_stock(self, request, pk=None):
         """Endpoint para ajustar stock de un producto"""
         producto = self.get_object()
