@@ -1,1 +1,1 @@
-Esto es un repo para aprender de DJANGO
+Esto es un repo para aprender de DJANGO con REACT
