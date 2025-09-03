@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 import {Producto, ProductoFormData} from "../types/Producto";
-
+import './productoForm.css'
 interface ProductoFormProps{
     producto?: Producto | null;
     onSubmit: (data: ProductoFormData) => void;
