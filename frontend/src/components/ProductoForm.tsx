@@ -39,6 +39,72 @@ const ProductoForm: React.FC<ProductoFormProps> =({
     };
 
     const handleSubmit = (e: React.FormEvent) => {
-        
-    }
-}
+        e.preventDefault();
+        onSubmit(formData);
+    };
+
+    return (
+        <div className="producto-form">
+            <h2> {producto ?  'Editar producto' : 'Crear Producto'}</h2>
+            
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="nombre">Nombre:</label>
+                    <input type="text"
+                    id="nombre"
+                    name = "nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="precio">Precio:</label>
+                    <input type="number"
+                        id="precio"
+                        name="precio"
+                        step="0.01"
+                        value={formData.precio}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="stock">Stock:</label>
+                    <input type="number" 
+                        id="number"
+                        name="stock"
+                        value={formData.stock}
+                        onChange={handleChange}
+                        required
+                        />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="descripcion">Descripcion:</label>
+                    <textarea 
+                    id="descripcion"
+                    name="descripcion"
+                    value={formData.descripcion}
+                    onChange={handleChange}
+                    rows={3}>
+                    </textarea>
+                </div>
+
+                <div className="form-actions">
+                    <button type="submit" className="btn btn-primary">
+                        {producto ? 'Actualizar' : 'Crear' }
+                    </button>
+
+                    <button type="button" onClick={onCancel} className="btn btn-secondary">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+};
+
+export default ProductoForm;

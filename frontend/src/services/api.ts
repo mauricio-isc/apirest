@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError, Axios } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { Producto } from '../types/Producto';
 
 
