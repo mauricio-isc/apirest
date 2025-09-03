@@ -47,5 +47,5 @@
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/tu-usuario/inventorypro.git
+git clone https://github.com/mauricio-isc/sistema-de-gestion-de-inventarios.git
 cd inventorypro
