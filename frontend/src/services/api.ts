@@ -39,7 +39,7 @@ export const productoService = {
         api.put<Producto>(`/productos/${id}/`, producto),
 
      // eliminar producto (DELETE)
-     deleteProducto: (id: number, producto: Partial<Producto>): Promise<AxiosResponse<Producto>> =>
+     deleteProducto: (id: number): Promise<AxiosResponse<Producto>> =>
         api.delete(`/productos/${id}/`),
 };
 
