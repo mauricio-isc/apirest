@@ -48,4 +48,3 @@
 ### 1. Clonar el Repositorio
 ```bash
 git clone https://github.com/mauricio-isc/sistema-de-gestion-de-inventarios.git
-cd inventorypro
