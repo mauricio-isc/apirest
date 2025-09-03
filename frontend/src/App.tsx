@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProductos } from './hooks/useProductos';
 import { Producto, ProductoFormData } from './types/Producto';
-import ProductoList from './components/ProductoList';
 import ProductoForm from './components/ProductoForm';
 import './App.css';
 
@@ -9,6 +8,26 @@ const App: React.FC = () => {
   const { productos, loading, error, createProducto, updateProducto, deleteProducto } = useProductos();
   const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [stats, setStats] = useState({
+    totalProductos: 0,
+    valorTotal: 0,
+    stockTotal: 0
+  });
+
+  useEffect(() => {
+    // Calcular estadísticas
+    const totalProductos = productos.length;
+    const valorTotal = productos.reduce((sum, p) => {
+      const precio = typeof p.precio === 'number' ? p.precio : parseFloat(p.precio);
+      return sum + precio;
+    }, 0);
+    const stockTotal = productos.reduce((sum, p) => {
+      const stock = typeof p.stock === 'number' ? p.stock : parseInt(p.stock);
+      return sum + stock;
+    }, 0);
+
+    setStats({ totalProductos, valorTotal, stockTotal });
+  }, [productos]);
 
   const handleCreate = async (productoData: ProductoFormData) => {
     try {
@@ -32,7 +51,7 @@ const App: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+    if (window.confirm('¿Está seguro de que desea eliminar este producto?')) {
       try {
         await deleteProducto(id);
       } catch (error) {
@@ -56,39 +75,26 @@ const App: React.FC = () => {
     setEditingProducto(null);
   };
 
-  const getStockClass = (stock: number): string => {
-    if (stock > 20) return 'high';
-    if (stock > 5) return 'medium';
-    return 'low';
+  const formatCurrency = (amount: number | string): string => {
+    const value = typeof amount === 'number' ? amount : parseFloat(amount);
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency',
+      currency: 'MXN'
+    }).format(isNaN(value) ? 0 : value);
   };
 
-  // Función segura para formatear el precio
-  const formatPrecio = (precio: number | string): string => {
-    if (typeof precio === 'number') {
-      return precio.toFixed(2);
-    }
-    if (typeof precio === 'string') {
-      const parsed = parseFloat(precio);
-      return isNaN(parsed) ? '0.00' : parsed.toFixed(2);
-    }
-    return '0.00';
-  };
-
-  // Función segura para obtener el stock como número
-  const getStockNumber = (stock: number | string): number => {
-    if (typeof stock === 'number') return stock;
-    if (typeof stock === 'string') {
-      const parsed = parseInt(stock);
-      return isNaN(parsed) ? 0 : parsed;
-    }
-    return 0;
+  const getStockStatus = (stock: number | string): string => {
+    const value = typeof stock === 'number' ? stock : parseInt(stock);
+    if (value > 20) return 'table-cell-success';
+    if (value > 5) return 'table-cell-info';
+    return 'table-cell-warning';
   };
 
   if (error) {
     return (
       <div className="app">
-        <div className="error-container">
-          <h2>Error</h2>
+        <div className="error-state">
+          <h3>Error del Sistema</h3>
           <p>{error}</p>
         </div>
       </div>
@@ -98,84 +104,142 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <div className="app-container">
-        <header className="app-header">
-          <h1>🏪 Gestor de Productos</h1>
+        {/* Header Corporativo */}
+        <header className="corporate-header">
+          <div className="header-content">
+            <div className="logo">
+              <div className="logo-icon">🏢</div>
+              <span>InventoryPro</span>
+            </div>
+            <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
+              Sistema de Gestión de Inventarios
+            </h1>
+          </div>
           <div className="header-actions">
-            <button onClick={handleNewProducto} className="btn-new">
-              ➕ Nuevo Producto
+            <button onClick={handleNewProducto} className="btn btn-primary">
+              <span>+</span>
+              Nuevo Producto
             </button>
           </div>
         </header>
 
-        <main className="app-main">
-          {showForm ? (
-            <ProductoForm
-              producto={editingProducto}
-              onSubmit={editingProducto ? handleEdit : handleCreate}
-              onCancel={handleCancel}
-            />
-          ) : (
-            <div className="products-table-container">
-              {loading ? (
-                <div className="loading-container">
-                  <div className="loading-spinner"></div>
-                  <p>Cargando productos...</p>
-                </div>
-              ) : productos.length === 0 ? (
-                <div className="empty-container">
-                  <div className="empty-icon">📦</div>
-                  <h3>No hay productos registrados</h3>
-                  <p>Comienza agregando tu primer producto</p>
-                </div>
+        <main className="main-content">
+          {/* Estadísticas */}
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <div className="stat-icon primary">📦</div>
+              </div>
+              <div className="stat-value">{stats.totalProductos}</div>
+              <div className="stat-label">Productos Totales</div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <div className="stat-icon success">💰</div>
+              </div>
+              <div className="stat-value">{formatCurrency(stats.valorTotal)}</div>
+              <div className="stat-label">Valor Total</div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-card-header">
+                <div className="stat-icon warning">📊</div>
+              </div>
+              <div className="stat-value">{stats.stockTotal}</div>
+              <div className="stat-label">Unidades en Stock</div>
+            </div>
+          </div>
+
+          {/* Tabla de Productos */}
+          <div className="dashboard-container">
+            <div className="dashboard-header">
+              <h2 className="dashboard-title">Inventario de Productos</h2>
+              <p className="dashboard-subtitle">
+                Gestión completa del catálogo de productos
+              </p>
+            </div>
+
+            <div className="products-section">
+              {showForm ? (
+                <ProductoForm
+                  producto={editingProducto}
+                  onSubmit={editingProducto ? handleEdit : handleCreate}
+                  onCancel={handleCancel}
+                />
               ) : (
-                <table className="products-table">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>Stock</th>
-                      <th>Descripción</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {productos.map((producto) => (
-                      <tr key={producto.id}>
-                        <td data-label="Nombre" className="col-nombre">
-                          {producto.nombre}
-                        </td>
-                        <td data-label="Precio" className="col-precio">
-                          ${formatPrecio(producto.precio)}
-                        </td>
-                        <td data-label="Stock" className={`col-stock ${getStockClass(getStockNumber(producto.stock))}`}>
-                          {getStockNumber(producto.stock)} unidades
-                        </td>
-                        <td data-label="Descripción" className="col-descripcion">
-                          {producto.descripcion || 'Sin descripción'}
-                        </td>
-                        <td data-label="Acciones" className="col-actions">
-                          <button
-                            onClick={() => handleEditProducto(producto)}
-                            className="btn-action btn-edit"
-                            title="Editar producto"
-                          >
-                            ✏️ Editar
-                          </button>
-                          <button
-                            onClick={() => handleDelete(producto.id!)}
-                            className="btn-action btn-delete"
-                            title="Eliminar producto"
-                          >
-                            🗑️ Eliminar
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="table-container">
+                  {loading ? (
+                    <div className="loading-state">
+                      <div className="loading-spinner"></div>
+                      <p>Cargando inventario...</p>
+                    </div>
+                  ) : productos.length === 0 ? (
+                    <div className="empty-state">
+                      <div className="empty-icon">📦</div>
+                      <h3>No hay productos registrados</h3>
+                      <p>Comience agregando su primer producto al inventario</p>
+                    </div>
+                  ) : (
+                    <table className="corporate-table">
+                      <thead>
+                        <tr>
+                          <th>Producto</th>
+                          <th>Precio</th>
+                          <th>Stock</th>
+                          <th>Descripción</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {productos.map((producto) => {
+                          const precio = typeof producto.precio === 'number' ? producto.precio : parseFloat(producto.precio);
+                          const stock = typeof producto.stock === 'number' ? producto.stock : parseInt(producto.stock);
+                          
+                          return (
+                            <tr key={producto.id}>
+                              <td className="table-cell-primary">
+                                <strong>{producto.nombre}</strong>
+                              </td>
+                              <td className="table-cell-number table-cell-currency">
+                                {formatCurrency(precio)}
+                              </td>
+                              <td className={getStockStatus(stock)}>
+                                {stock} unidades
+                              </td>
+                              <td>
+                                <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+                                  {producto.descripcion || 'Sin descripción'}
+                                </span>
+                              </td>
+                              <td>
+                                <div className="table-actions">
+                                  <button
+                                    onClick={() => handleEditProducto(producto)}
+                                    className="btn-action btn-edit"
+                                    title="Editar producto"
+                                  >
+                                    ✏️
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(producto.id!)}
+                                    className="btn-action btn-delete"
+                                    title="Eliminar producto"
+                                  >
+                                    🗑️
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
         </main>
       </div>
     </div>
