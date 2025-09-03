@@ -35,7 +35,7 @@ export const useProductos = (): UseProductosReturn => {
             const producto: Omit<Producto, 'id'> = {
                 nombre: productoData.nombre,
                 precio: parseFloat(productoData.precio),
-                description: productoData.descripcion,
+                descripcion: productoData.descripcion,
                 stock: parseInt(productoData.stock),
             };
             const response = await productoService.createProducto(producto);
@@ -56,7 +56,7 @@ export const useProductos = (): UseProductosReturn => {
             const producto: Partial<Producto> = {
                 nombre: productoData.nombre,
                 precio: parseFloat(productoData.precio),
-                description: productoData.descripcion,
+                descripcion: productoData.descripcion,
                 stock: parseInt(productoData.stock),
             };
 

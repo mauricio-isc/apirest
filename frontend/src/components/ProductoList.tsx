@@ -31,7 +31,7 @@ const ProductoList: React.FC<ProductoListProps> = ({
                     <div key={producto.id} className="producto-card">
                         <h3>{producto.nombre}</h3>
                         <p>Precio: {producto.precio}</p>
-                        <p>{producto.description}</p>
+                        <p>{producto.descripcion}</p>
                         <div className="producto-actions">
                             <button
                             onClick={() => onEdit(producto)}

@@ -24,7 +24,7 @@ const ProductoForm: React.FC<ProductoFormProps> =({
             setFormData({
                 nombre: producto.nombre || '',
                 precio: producto.precio.toString() || '',
-                descripcion:producto.description || '',
+                descripcion:producto.descripcion || '',
                 stock: producto.stock.toString() || ''
             });
         }
