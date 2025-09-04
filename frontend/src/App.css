@@ -208,7 +208,6 @@
 }
 
 .table-cell-currency::before {
-  content: '$';
   margin-right: 0.25rem;
 }
 

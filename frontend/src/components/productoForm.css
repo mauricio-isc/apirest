@@ -262,7 +262,7 @@
     background: linear-gradient(135deg, #fff 0%, #f8fff8 100%);
 }
 
-/* Iconos opcionales (puedes agregar FontAwesome) */
+
 .form-group label::before {
     content: '→';
     margin-right: 0.5rem;
