@@ -8,7 +8,7 @@ services:
   db:
     image: postgres:13-alphine  #imagen de PostgreSQL
     container_name: inventorypro_db #nombre del contenedor
-    enviroment:
+    environment:
       POSTGRES_DB: inventorypro     #Imagen de PostgreSQL
       POSTGRES_USER: postgres       #usuario
       POSTGRES_PASSWORD: developer  #contasena
@@ -26,7 +26,7 @@ services:
       backend:
         build: ./myapi                #CONSTRUIR DESDE ESTA CARPETA
         container_name: inventorypro_backend
-        enviroment:
+        environment:
           DEBUG: "True"
           DB_NAME: inventorypro
           DB_USER: postgresql
