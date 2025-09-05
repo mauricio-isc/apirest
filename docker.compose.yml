@@ -1,1 +1,62 @@
+#Version de docker-compose
 version: '3.8'
+
+#Este archivo orquesta multiples contenedores
+
+services:
+  #servicio de base de datos
+  db:
+    image: postgres:13-alphine  #imagen de PostgreSQL
+    container_name: inventorypro_db #nombre del contenedor
+    enviroment:
+      POSTGRES_DB: inventorypro     #Imagen de PostgreSQL
+      POSTGRES_USER: postgres       #usuario
+      POSTGRES_PASSWORD: developer  #contasena
+      volumes:
+        - postgres_data:/var/lib/postgresql/data #persistencia de datos
+      ports:
+        - "5432"                      #Puerto mapeado
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U django"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+      #Servicio de django
+      backend:
+        build: ./myapi                #CONSTRUIR DESDE ESTA CARPETA
+        container_name: inventorypro_backend
+        enviroment:
+          DEBUG: "True"
+          DB_NAME: inventorypro
+          DB_USER: postgresql
+          DB_PASSWORD: developer
+          DB_HOST: db 
+          DB_PORT: "5432"
+        ports:
+        - "8000:8000"
+        volumes:
+          - ./myapi:/app               #Montar el codigo para desarollo
+          - /app/__pycache__           #Ignora el cache
+        depends_on:
+          db:
+            condition: service_healthy  #Esperar a que la bd este lista
+        restart: unless-stopped
+
+        #Servicio de React
+      frontend:
+        build: ./frontend
+        container_name: inventorypro_frontend
+        ports:
+          - "3000:80"                   #Puerto mapeado (80 interno -> 3000 externo)
+        volumes:
+          - ./frontend:/app             #Montar codigo para el desarrollo
+          - ./app/node_modules          #Ignorar node_modules
+        depends:
+        - backend
+        restart: unless-stopped
+
+#Volumenes para persistencia
+volumes:
+  postgres_data:
+  driver: local
