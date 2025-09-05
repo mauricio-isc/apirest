@@ -1,87 +1,61 @@
-📦 InventoryPro – Sistema de Gestión de Inventarios
-✨ Características Principales
-🎯 Funcionalidades
+# 📦 InventoryPro – Sistema de Gestión de Inventarios
 
-CRUD Completo de productos
+## ✨ Características Principales
 
-Dashboard ejecutivo con métricas en tiempo real
+### 🎯 Funcionalidades
+- **CRUD Completo** de productos
+- **Dashboard ejecutivo** con métricas en tiempo real
+- **Interfaz responsive** adaptable a dispositivos móviles
+- **Validaciones** de datos robustas
+- **API REST** bien documentada
+- **Panel de administración** Django integrado
 
-Interfaz responsive adaptable a dispositivos móviles
+### 🎨 Diseño Corporativo
+- **Interfaz empresarial** moderna y profesional
+- **Paleta de colores** corporativa azul
+- **Animaciones sutiles** y transiciones fluidas
+- **Tipografía Inter** para mejor legibilidad
+- **Componentes modulares** y reutilizables
 
-Validaciones de datos robustas
+### 📊 Dashboard Ejecutivo
+- 📦 **Total de productos** en inventario
+- 💰 **Valor total** del inventario
+- 📊 **Unidades en stock** disponibles
+- 📈 **Métricas visuales** en tiempo real
 
-API REST bien documentada
+## 🚀 Tecnologías Utilizadas
 
-Panel de administración Django integrado
+### Backend
+- **Django 4.2.5** - Framework web Python
+- **Django REST Framework** - API REST
+- **Django CORS Headers** - Manejo de CORS
+- **PostgreSQL** - Base de datos (opcional SQLite)
+- **Python 3.13** - Lenguaje de programación
 
-🎨 Diseño Corporativo
+### Frontend
+- **React 18.2.0** - Biblioteca de interfaz de usuario
+- **TypeScript 5.0** - JavaScript tipado
+- **Axios** - Cliente HTTP para APIs
+- **CSS3** - Estilos con diseño moderno
+- **HTML5** - Estructura semántica
 
-Interfaz empresarial moderna y profesional
+## 📦 Instalación y Configuración
 
-Paleta de colores corporativa azul
+### 🔑 Prerrequisitos
+- Python 3.8+
+- Node.js 16+
+- PostgreSQL (opcional)
+- pip y npm
+- Docker Engine 20.10+
+- Docker Compose 2.0+
 
-Animaciones sutiles y transiciones fluidas
-
-Tipografía Inter para mejor legibilidad
-
-Componentes modulares y reutilizables
-
-📊 Dashboard Ejecutivo
-
-📦 Total de productos en inventario
-
-💰 Valor total del inventario
-
-📊 Unidades en stock disponibles
-
-📈 Métricas visuales en tiempo real
-
-🚀 Tecnologías Utilizadas
-Backend
-
-Django 4.2.5 – Framework web Python
-
-Django REST Framework – API REST
-
-Django CORS Headers – Manejo de CORS
-
-PostgreSQL – Base de datos (opcional SQLite)
-
-Python 3.13 – Lenguaje de programación
-
-Frontend
-
-React 18.2.0 – Biblioteca de interfaz de usuario
-
-TypeScript 5.0 – JavaScript tipado
-
-Axios – Cliente HTTP para APIs
-
-CSS3 – Estilos con diseño moderno
-
-HTML5 – Estructura semántica
-
-📦 Instalación y Configuración
-🔑 Prerrequisitos
-
-Python 3.8+
-
-Node.js 16+
-
-PostgreSQL (opcional)
-
-pip y npm
-
-Docker Engine 20.10+
-
-Docker Compose 2.0+
-
-1. Clonar el Repositorio
+### 1. Clonar el Repositorio
+```bash
 git clone https://github.com/mauricio-isc/sistema-de-gestion-de-inventarios.git
 cd sistema-de-gestion-de-inventarios
-
 🐳 Despliegue con Docker
 2. Levantar los Servicios con Docker Compose
+bash
 # Construir y ejecutar todos los servicios
 docker-compose up -d --build
 
@@ -93,8 +67,8 @@ docker-compose logs -f
 
 # Detener los servicios
 docker-compose down
-
 3. Comandos Útiles de Docker
+bash
 # Acceder a la base de datos
 docker-compose exec db psql -U django -d inventorypro
 
@@ -111,11 +85,10 @@ docker-compose logs frontend
 # Shell en los contenedores
 docker-compose exec backend bash
 docker-compose exec frontend sh
-
 ⚙️ Variables de Entorno
-
 Crea un archivo .env en la raíz del proyecto:
 
+env
 # Database
 DB_NAME=inventorypro
 DB_USER=django
@@ -131,9 +104,7 @@ ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
 # React
 REACT_APP_API_URL=http://localhost:8000/api
 REACT_APP_APP_NAME=InventoryPro
-
 🌐 Puertos Expuestos
-
 Frontend React: http://localhost:3000
 
 Backend Django: http://localhost:8000
@@ -144,46 +115,46 @@ PostgreSQL: localhost:5432
 
 🐳 Estructura de Contenedores
 Backend (Django)
+dockerfile
 FROM python:3.11-slim
 # - Instalación de dependencias del sistema
 # - Configuración de PostgreSQL
 # - Script de entrypoint automático
 # - Migraciones automáticas al iniciar
-
 Frontend (React)
+dockerfile
 FROM node:18-alpine as build
 # - Build optimizado de producción
 # - Servido con Nginx
 # - Configuración de reverse proxy
-
 Base de Datos (PostgreSQL)
+yaml
 image: postgres:13-alpine
 # - Volumen persistente para datos
 # - Health checks automáticos
 # - Configuración optimizada
-
 🐳 Volúmenes Persistentes
+yaml
 volumes:
-  postgres_data:   # Datos de PostgreSQL
-  static_volume:   # Archivos estáticos
+  postgres_data:    # Datos de PostgreSQL
+  static_volume:    # Archivos estáticos
+✔️ Persistencia de datos entre reinicios
 
-
-✔ Persistencia de datos entre reinicios
-✔ Backup automático de base de datos
+✔️ Backup automático de base de datos
 
 🐳 Health Checks y Monitoreo
+yaml
 healthcheck:
   test: ["CMD-SHELL", "pg_isready -U django"]
   interval: 10s
   timeout: 5s
   retries: 5
+✅ Monitoreo automático de servicios
 
-
-Monitoreo automático de servicios
-
-Reinicios automáticos en fallos
+✅ Reinicios automáticos en fallos
 
 🐳 Despliegue en Producción
+bash
 # Build para producción
 docker-compose -f docker-compose.prod.yml build
 
@@ -192,18 +163,16 @@ docker-compose -f docker-compose.prod.yml up -d
 
 # Verificar estado
 docker-compose -f docker-compose.prod.yml ps
-
 🐳 Configuración de Redes
+yaml
 networks:
   inventorypro_network:
     driver: bridge
+✔️ Comunicación aislada entre contenedores
 
-
-✔ Comunicación aislada entre contenedores
-✔ Seguridad mejorada
+✔️ Seguridad mejorada
 
 ✅ Ventajas del Deployment con Docker
-
 Consistencia – Mismo entorno en desarrollo y producción
 
 Aislamiento – Servicios independientes y seguros
@@ -215,6 +184,7 @@ Portabilidad – Funciona en cualquier sistema con Docker
 Versionado – Control de versiones de cada servicio
 
 🐳 Solución de Problemas
+bash
 # Ver uso de recursos
 docker stats
 
@@ -226,8 +196,8 @@ docker network inspect inventorypro_network
 
 # Backup de base de datos
 docker-compose exec db pg_dump -U django inventorypro > backup.sql
-
 🐳 Ejemplo de Docker Compose (Desarrollo)
+yaml
 version: '3.8'
 services:
   db:
