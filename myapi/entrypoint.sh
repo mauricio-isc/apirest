@@ -21,11 +21,12 @@ python manage.py shell -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='admin').exists():
-    User.object.create_superuser('admin', 'admin@inventorypro.com', 'admin123')
-    print(' Superusuario creado: admin/admin123')
-    else:
-    print('el superusuario ya existe')
- "
+    User.objects.create_superuser('admin', 'admin@inventorypro.com', 'admin123')
+    print('Superusuario creado: admin/admin123')
+else:
+    print('El superusuario ya existe')
+"
+
 #Colectar archivos estaticos
 echo " Colectando archivos estaticos"
 python manage.py collectstatic --noinput
