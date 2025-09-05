@@ -1,52 +1,4 @@
 📦 InventoryPro – Sistema de Gestión de Inventarios
-📚 Tabla de Contenidos
-
-✨ Características Principales
-
-🎯 Funcionalidades
-
-🎨 Diseño Corporativo
-
-📊 Dashboard Ejecutivo
-
-🚀 Tecnologías Utilizadas
-
-Backend
-
-Frontend
-
-📦 Instalación y Configuración
-
-🔑 Prerrequisitos
-
-1. Clonar el Repositorio
-
-🐳 Despliegue con Docker
-
-2. Levantar los Servicios con Docker Compose
-
-3. Comandos Útiles de Docker
-
-⚙️ Variables de Entorno
-
-🌐 Puertos Expuestos
-
-🐳 Estructura de Contenedores
-
-🐳 Volúmenes Persistentes
-
-🐳 Health Checks y Monitoreo
-
-🐳 Despliegue en Producción
-
-🐳 Configuración de Redes
-
-✅ Ventajas del Deployment con Docker
-
-🐳 Solución de Problemas
-
-🐳 Ejemplo de Docker Compose (Desarrollo)
-
 ✨ Características Principales
 🎯 Funcionalidades
 
@@ -130,23 +82,39 @@ cd sistema-de-gestion-de-inventarios
 
 🐳 Despliegue con Docker
 2. Levantar los Servicios con Docker Compose
+# Construir y ejecutar todos los servicios
 docker-compose up -d --build
+
+# Ver el estado de los contenedores
 docker-compose ps
+
+# Ver logs en tiempo real
 docker-compose logs -f
+
+# Detener los servicios
 docker-compose down
 
 3. Comandos Útiles de Docker
+# Acceder a la base de datos
 docker-compose exec db psql -U django -d inventorypro
+
+# Ejecutar migraciones manualmente
 docker-compose exec backend python manage.py migrate
+
+# Crear superusuario
 docker-compose exec backend python manage.py createsuperuser
+
+# Ver logs específicos
 docker-compose logs backend
 docker-compose logs frontend
+
+# Shell en los contenedores
 docker-compose exec backend bash
 docker-compose exec frontend sh
 
 ⚙️ Variables de Entorno
 
-Archivo .env en la raíz del proyecto:
+Crea un archivo .env en la raíz del proyecto:
 
 # Database
 DB_NAME=inventorypro
@@ -199,6 +167,10 @@ volumes:
   postgres_data:   # Datos de PostgreSQL
   static_volume:   # Archivos estáticos
 
+
+✔ Persistencia de datos entre reinicios
+✔ Backup automático de base de datos
+
 🐳 Health Checks y Monitoreo
 healthcheck:
   test: ["CMD-SHELL", "pg_isready -U django"]
@@ -206,15 +178,29 @@ healthcheck:
   timeout: 5s
   retries: 5
 
+
+Monitoreo automático de servicios
+
+Reinicios automáticos en fallos
+
 🐳 Despliegue en Producción
+# Build para producción
 docker-compose -f docker-compose.prod.yml build
+
+# Ejecutar en producción
 docker-compose -f docker-compose.prod.yml up -d
+
+# Verificar estado
 docker-compose -f docker-compose.prod.yml ps
 
 🐳 Configuración de Redes
 networks:
   inventorypro_network:
     driver: bridge
+
+
+✔ Comunicación aislada entre contenedores
+✔ Seguridad mejorada
 
 ✅ Ventajas del Deployment con Docker
 
@@ -229,9 +215,16 @@ Portabilidad – Funciona en cualquier sistema con Docker
 Versionado – Control de versiones de cada servicio
 
 🐳 Solución de Problemas
+# Ver uso de recursos
 docker stats
+
+# Limpiar recursos no utilizados
 docker system prune
+
+# Ver información de la red
 docker network inspect inventorypro_network
+
+# Backup de base de datos
 docker-compose exec db pg_dump -U django inventorypro > backup.sql
 
 🐳 Ejemplo de Docker Compose (Desarrollo)
